@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "log-to-observability-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: log-to-observability-alan-vo",
+  "workflows": [
+    "Log ingestion, parsing, and service architecture auto-detection",
+    "Metric mapping and Prometheus/Alertmanager alert rule generation",
+    "Grafana dashboard and SLO error budget configuration generation"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "version": "1.0.0",
+  "status": "work-in-progress"
+}

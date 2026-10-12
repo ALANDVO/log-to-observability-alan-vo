@@ -1,32 +1,32 @@
-# Unified LLM client.
-import os, json, requests
+"""Unified LLM client interface."""
+import sys
+import os
+import asyncio
+
+backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backend")
+if backend_path not in sys.path:
+    sys.path.insert(0, backend_path)
+
+from app.services.llm_advisor import LLMAdvisor
 
 class LLM:
     def __init__(self):
-        self.api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("GEMINI_API_KEY") or os.environ.get("LLM_API_KEY", "")
-        self.base_url = os.environ.get("LLM_BASE_URL", "https://api.openai.com/v1")
-        self.model = os.environ.get("LLM_MODEL", "gpt-4o")
+        self._advisor = LLMAdvisor()
+
+    def generate(self, prompt: str, system: str = "You are a helpful AI assistant.") -> str:
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+        if loop.is_running():
+            import nest_asyncio
+            nest_asyncio.apply()
+            return loop.run_until_complete(self._advisor.generate_advisory(prompt, system_prompt=system))
+        return asyncio.run(self._advisor.generate_advisory(prompt, system_prompt=system))
 
     def chat(self, messages, temperature=0.7, max_tokens=2048):
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-        payload = {"model": self.model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
-        r = requests.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=120)
-        r.raise_for_status()
-        return r.json()["choices"][0]["message"]["content"]
-
-    def classify(self, text, categories, instructions=""):
-        sep = ", "
-        prompt = f"{instructions}Classify: {text}
-Categories: {sep.join(categories)}
-Respond as JSON: {{"category": "...", "confidence": 0.95, "reasoning": "..."}}"
-        raw = self.chat([{"role": "system", "content": "Respond only with valid JSON."}, {"role": "user", "content": prompt}])
-        start, end = raw.find("{"), raw.rfind("}") + 1
-        try:
-            return json.loads(raw[start:end])
-        except:
-            return {"category": "unknown", "confidence": 0.0, "reasoning": raw}
-
-    def generate(self, prompt, system="You are a helpful AI assistant.", temperature=0.7):
-        return self.chat([{"role": "system", "content": system}, {"role": "user", "content": prompt}], temperature=temperature)
+        user_msg = messages[-1]["content"] if messages else ""
+        sys_msg = messages[0]["content"] if len(messages) > 1 and messages[0]["role"] == "system" else ""
+        return self.generate(user_msg, system=sys_msg)

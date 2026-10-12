@@ -9,7 +9,13 @@ build/
 *.egg-info/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
 *.log
 .DS_Store
 frontend/node_modules/
 frontend/dist/
+*.db
+*.sqlite
+*.sqlite3
+.antigravitycli/
+.omp/

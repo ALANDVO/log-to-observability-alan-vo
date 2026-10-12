@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "log-to-observability-alan-vo"
+version = "1.0.0"
+description = "AI log-to-observability pipeline auto-detecting service architecture and generating Grafana dashboards, alert rules, and SLOs."
+readme = "README.md"
+authors = [
+    { name = "Alan Vo", email = "alanvo@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.31.0",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.5.2",
+    "sqlalchemy>=2.0.35",
+    "httpx>=0.27.2",
+    "pyjwt>=2.9.0",
+    "cryptography>=43.0.1",
+    "python-multipart>=0.0.12",
+    "pyyaml>=6.0.2"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0"
+]
