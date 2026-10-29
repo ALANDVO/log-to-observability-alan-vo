@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.1.0 — work-in-progress checkpoint
+## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.1.0 — work-in-progress checkpoint
+
+All three core features implemented and tested:
+- **log-architecture-detection**: Multi-format log ingestion (JSON lines, syslog RFC 5424/3164, Nginx combined access logs, container stdout), deterministic architecture topology engine discovering microservice dependencies, communication protocols (HTTP, queue, gRPC), entrypoint routing, datastore dependencies, and failure modes. Opt-in advisory multi-provider LLM adapter supporting OpenAI-compatible, Anthropic, Gemini, and local Ollama endpoints with strict timeouts and credential isolation.
+- **metric-alert-generator**: Deterministic pattern extraction mapping logs to RED/USE metrics, generation of valid Prometheus/Alertmanager rule YAML with severity tags and runbook annotations.
+- **grafana-slo-engine**: Export of Grafana dashboard JSON (schemaVersion 39+) with PromQL panels, multi-window burn-rate SLO calculation (1h @ 14.4x, 6h @ 6x, 24h @ 1x) following Google SRE methodology.
+
+Complete test coverage: 20 backend tests + 8 frontend tests passing.
 
 ## [1.0.0] - 2026-10-20
 
