@@ -100,13 +100,23 @@ class ArchitectureDetector:
                     edge_map[key]["latencies"].append(ev.duration_ms)
 
         # Fallback topology heuristic: Gateway connects to other business services if no explicit edges
-        if not edge_map and len(services) > 1:
-            gateways = [s.name for s in services if s.role == "gateway"]
-            targets = [s.name for s in services if s.role != "gateway"]
-            for gw in gateways:
-                for tgt in targets:
-                    key = (gw, tgt, "http")
-                    edge_map[key]["count"] += max(1, service_events[tgt].__len__() // 2)
+        # Also enhance: if gateway exists but has no outgoing edges to some business services, add inferred edges
+        gateway_names = [s.name for s in services if s.role == "gateway"]
+        other_services = [s.name for s in services if s.role != "gateway"]
+        
+        # Check which gateways have outgoing edges to which targets
+        gateway_outgoing_targets: Dict[str, Set[str]] = defaultdict(set)
+        for (src, tgt, _) in edge_map.keys():
+            if src in gateway_names:
+                gateway_outgoing_targets[src].add(tgt)
+        
+        # Add inferred edges for gateways missing connections to business services
+        for gw in gateway_names:
+            existing_targets = gateway_outgoing_targets.get(gw, set())
+            missing_targets = [tgt for tgt in other_services if tgt not in existing_targets]
+            for tgt in missing_targets:
+                key = (gw, tgt, "http")
+                edge_map[key]["count"] += max(1, service_events[tgt].__len__() // 2)
 
         topology: List[TopologyEdge] = []
         for (src, tgt, proto), stats in sorted(edge_map.items()):

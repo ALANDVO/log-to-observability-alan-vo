@@ -1,8 +1,15 @@
 # Changelog
 
+## 1.3.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+
+### Changed
+- **Enhanced topology inference**: Gateway services with partial explicit edges now automatically infer connections to remaining business services. The fallback heuristic works complementarily with explicit edge detection rather than only as a complete fallback when no edges exist.
 
 ## 1.1.0 — work-in-progress checkpoint
 

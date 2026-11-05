@@ -50,3 +50,28 @@ def test_detect_failure_patterns_with_evidence():
     # Evidence lines must be non-empty
     for fp in arch.failure_patterns:
         assert len(fp.evidence_lines) > 0
+def test_gateway_inferred_edges_when_partial_explicit():
+    """Test that gateway gets inferred edges to services it doesn't explicitly call."""
+    raw_logs = """
+    {"ts": "2026-10-12T10:00:00Z", "service": "api-gateway", "method": "GET", "path": "/api/v1/orders", "status": 200, "duration_ms": 35, "caller": "10.0.0.1", "downstream": "order-service"}
+    {"ts": "2026-10-12T10:00:01Z", "service": "order-service", "method": "POST", "path": "/orders", "status": 200, "duration_ms": 90, "caller": "api-gateway", "datastore": "postgres"}
+    {"ts": "2026-10-12T10:00:02Z", "service": "payment-service", "method": "POST", "path": "/charge", "status": 200, "duration_ms": 110, "datastore": "redis"}
+    {"ts": "2026-10-12T10:00:03Z", "service": "inventory-service", "method": "GET", "path": "/items", "status": 200, "duration_ms": 45}
+    """
+    events = LogParser.parse_text(raw_logs)
+    arch = ArchitectureDetector.detect(events)
+
+    service_names = {s.name for s in arch.services}
+    assert "api-gateway" in service_names
+    assert "order-service" in service_names
+    assert "payment-service" in service_names
+    assert "inventory-service" in service_names
+
+    # Gateway has explicit edge to order-service (via downstream field)
+    edges = {(e.source, e.target) for e in arch.topology}
+    assert ("api-gateway", "order-service") in edges
+
+    # But gateway should also get inferred edges to payment-service and inventory-service
+    # since they are business services and gateway has no explicit edges to them
+    assert ("api-gateway", "payment-service") in edges
+    assert ("api-gateway", "inventory-service") in edges
