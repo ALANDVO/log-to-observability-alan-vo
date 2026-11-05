@@ -48,3 +48,16 @@ Implementation: `backend/app/services/dashboard_generator.py`, `backend/app/serv
 
 Tests: `backend/tests/test_dashboard_generator.py`, `backend/tests/test_slo_engine.py`
 
+### enhanced-topology-inference — Improved Gateway Topology Inference
+
+Status: in_progress
+
+Acceptance:
+- Gateway services with partial explicit edges automatically get inferred connections to remaining business services
+- Fallback heuristic enhanced to work complementarily with explicit edge detection, not just as a complete fallback
+- Maintains backward compatibility with existing explicit edge detection
+
+Implementation: `backend/app/services/architecture_detector.py`
+
+Tests: `backend/tests/test_architecture.py::test_gateway_inferred_edges_when_partial_explicit`
+
