@@ -227,4 +227,4 @@ MIT License. Copyright &copy; 2026 [Alan Vo](https://github.com/ALANDVO) &lt;ala
 
 ---
 
-Alan Vo · [alanvo.net](https://alanvo.net)
+Alan Vo · [alanvo.net](https://alanvo.net) · [X: @alanvoasi](https://x.com/alanvoasi)

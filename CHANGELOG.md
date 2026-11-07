@@ -50,4 +50,4 @@ Complete test coverage: 20 backend tests + 8 frontend tests passing.
 
 ---
 
-Alan Vo · [alanvo.net](https://alanvo.net)
+Alan Vo · [alanvo.net](https://alanvo.net) · [X: @alanvoasi](https://x.com/alanvoasi)

@@ -63,4 +63,4 @@ Tests: `backend/tests/test_architecture.py::test_gateway_inferred_edges_when_par
 
 ---
 
-Alan Vo · [alanvo.net](https://alanvo.net)
+Alan Vo · [alanvo.net](https://alanvo.net) · [X: @alanvoasi](https://x.com/alanvoasi)
