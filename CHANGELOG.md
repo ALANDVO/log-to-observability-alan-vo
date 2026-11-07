@@ -47,3 +47,7 @@ Complete test coverage: 20 backend tests + 8 frontend tests passing.
 - Keycloak OIDC authentication with PKCE authorization code flow and SAML identity brokering support, plus safe local demo mode refusing production activation.
 - React + TypeScript dashboard with interactive SVG service topology graph, log ingestion workflow, and real-time analysis details.
 - Comprehensive test suite covering log parsing, topology discovery, security role enforcement, and HTTP boundaries.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

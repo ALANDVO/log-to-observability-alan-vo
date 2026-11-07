@@ -224,3 +224,7 @@ The application implements OIDC authorization-code flow with PKCE using Keycloak
 ## License
 
 MIT License. Copyright &copy; 2026 [Alan Vo](https://github.com/ALANDVO) &lt;alanvo@gmail.com&gt;.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

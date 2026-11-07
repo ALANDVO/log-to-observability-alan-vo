@@ -61,3 +61,6 @@ Implementation: `backend/app/services/architecture_detector.py`
 
 Tests: `backend/tests/test_architecture.py::test_gateway_inferred_edges_when_partial_explicit`
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
