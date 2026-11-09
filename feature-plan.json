@@ -64,7 +64,7 @@
     {
       "id": "enhanced-topology-inference",
       "title": "Improved Gateway Topology Inference",
-      "status": "in_progress",
+      "status": "done",
       "acceptance": [
         "Gateway services with partial explicit edges automatically get inferred connections to remaining business services",
         "Fallback heuristic enhanced to work complementarily with explicit edge detection, not just as a complete fallback",
