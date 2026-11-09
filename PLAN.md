@@ -50,7 +50,7 @@ Tests: `backend/tests/test_dashboard_generator.py`, `backend/tests/test_slo_engi
 
 ### enhanced-topology-inference — Improved Gateway Topology Inference
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - Gateway services with partial explicit edges automatically get inferred connections to remaining business services
