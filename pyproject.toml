@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "log-to-observability-alan-vo"
-version = "1.0.0"
+version = "1.5.0"
 description = "AI log-to-observability pipeline auto-detecting service architecture and generating Grafana dashboards, alert rules, and SLOs."
 readme = "README.md"
 authors = [
