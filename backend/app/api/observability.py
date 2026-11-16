@@ -43,14 +43,15 @@ def generate_dashboard(
     db: Session = Depends(get_db),
     user: UserPrincipal = Depends(require_role("operator"))
 ):
+    from app.models.schemas import ServiceNode, DatastoreNode
     arch = None
     if payload.architecture_id:
         r = db.query(ArchitectureEntity).filter(ArchitectureEntity.id == payload.architecture_id).first()
         if not r:
             raise HTTPException(status_code=404, detail=f"Architecture #{payload.architecture_id} not found")
         arch = ArchitectureDetector.detect(LogParser.parse_text(""), title=r.title)
-        arch.services = [type('Node', (), s) for s in json.loads(r.services_json)]  # type: ignore
-        arch.datastores = [type('DS', (), d) for d in json.loads(r.datastores_json)]  # type: ignore
+        arch.services = [ServiceNode(**s) for s in json.loads(r.services_json)]
+        arch.datastores = [DatastoreNode(**d) for d in json.loads(r.datastores_json)]
     elif payload.logs:
         events = LogParser.parse_text(payload.logs)
         arch = ArchitectureDetector.detect(events, title=payload.title or "Observability Dashboard")
