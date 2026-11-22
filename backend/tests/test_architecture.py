@@ -75,3 +75,37 @@ def test_gateway_inferred_edges_when_partial_explicit():
     # since they are business services and gateway has no explicit edges to them
     assert ("api-gateway", "payment-service") in edges
     assert ("api-gateway", "inventory-service") in edges
+
+
+def test_gateway_inferred_edges_when_mostly_explicit():
+    """Test that gateway gets inferred edges to remaining services when it has partial explicit edges.
+    
+    Scenario: gateway has explicit edges to 2 out of 3 business services,
+    so 1 inferred edge is added for the missing service.
+    """
+    raw_logs = """
+    {"ts": "2026-10-12T10:00:00Z", "service": "api-gateway", "method": "GET", "path": "/api/v1/orders", "status": 200, "duration_ms": 35, "caller": "10.0.0.1", "downstream": "order-service"}
+    {"ts": "2026-10-12T10:00:01Z", "service": "order-service", "method": "POST", "path": "/orders", "status": 200, "duration_ms": 90, "caller": "api-gateway", "datastore": "postgres"}
+    {"ts": "2026-10-12T10:00:02Z", "service": "payment-service", "method": "POST", "path": "/charge", "status": 200, "duration_ms": 110, "datastore": "redis"}
+    {"ts": "2026-10-12T10:00:03Z", "service": "api-gateway", "method": "GET", "path": "/api/v1/payment", "status": 200, "duration_ms": 25, "caller": "10.0.0.1", "downstream": "payment-service"}
+    {"ts": "2026-10-12T10:00:04Z", "service": "inventory-service", "method": "GET", "path": "/items", "status": 200, "duration_ms": 45}
+    """
+    events = LogParser.parse_text(raw_logs)
+    arch = ArchitectureDetector.detect(events)
+
+    service_names = {s.name for s in arch.services}
+    assert "api-gateway" in service_names
+    assert "order-service" in service_names
+    assert "payment-service" in service_names
+    assert "inventory-service" in service_names
+
+    # Gateway has explicit edge to order-service (via downstream field) and payment-service (via downstream field)
+    edges = {(e.source, e.target) for e in arch.topology}
+    assert ("api-gateway", "order-service") in edges
+
+    # Gateway has explicit edge to payment-service (via downstream field)
+    assert ("api-gateway", "payment-service") in edges
+
+    # But gateway should also get inferred edge to inventory-service
+    # since it's a business service and gateway has no explicit edge to it
+    assert ("api-gateway", "inventory-service") in edges
