@@ -116,7 +116,7 @@ class ArchitectureDetector:
             missing_targets = [tgt for tgt in other_services if tgt not in existing_targets]
             for tgt in missing_targets:
                 key = (gw, tgt, "http")
-                edge_map[key]["count"] += max(1, service_events[tgt].__len__() // 2)
+                edge_map[key]["count"] += max(1, len(service_events[tgt]) // 2)
 
         topology: List[TopologyEdge] = []
         for (src, tgt, proto), stats in sorted(edge_map.items()):
